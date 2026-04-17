@@ -76,10 +76,6 @@ class CodeGenerator:
             return CodegenResult(ok=False, translated_text="", model="", notes=notes)
 
         if not self._semantic.input_language_valid:
-            notes.append(
-                "Generasi dibatalkan: **validasi bahasa** — teks harus berbahasa Indonesia atau Inggris "
-                "dan harus sesuai dengan pilihan \"Bahasa sumber\" (lihat pesan di layar)."
-            )
             return CodegenResult(ok=False, translated_text="", model="", notes=notes)
 
         src_hint = self._semantic.detected_lang or "unknown"

@@ -175,9 +175,7 @@ def main() -> None:
         st.divider()
         sem = pipeline["semantic"]
         if not sem.input_language_valid:
-            st.error("Validasi bahasa: input ditolak. Hanya teks **Indonesia** atau **Inggris** yang sesuai pilihan bahasa sumber.")
-            for m in sem.messages:
-                st.caption(m)
+            pass
         g = pipeline["codegen"]
         if g.ok and g.translated_text:
             st.success("Terjemahan")

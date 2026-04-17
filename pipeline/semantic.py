@@ -122,16 +122,9 @@ class SemanticAnalyzer:
             top = langs[0] if langs else None
             confidence = float(top.prob) if top else None
             content_lang = detect(self._text)
-            messages.append(
-                f"Bahasa isi teks (langdetect): {_LANG_NAMES.get(content_lang, content_lang)} (kode: {content_lang})."
-            )
-            if langs:
-                topn = ", ".join(f"{x.lang}:{x.prob:.2f}" for x in langs[:5])
-                messages.append(f"Skor teratas (langdetect): {topn}")
         except LangDetectException:
             langs = []
             content_lang = None
-            messages.append("Deteksi bahasa isi teks gagal (terlalu pendek atau ambigu).")
 
         input_language_valid = False
         src = self._source_lang
@@ -159,15 +152,9 @@ class SemanticAnalyzer:
                 elif content_lang == "id":
                     messages.append("Validasi bahasa OK: isi diperlakukan sebagai **Indonesia**.")
             elif content_lang == "en" and _lang_prob(langs, "en") >= 0.35 and _lang_prob(langs, "id") < _MIN_ID_SCORE:
-                messages.append(
-                    "**Input ditolak:** teks terlihat seperti **Inggris**, sedangkan bahasa sumber **Indonesia**. "
-                    "Ubah pilihan bahasa sumber ke Inggris atau tulis dalam bahasa Indonesia."
-                )
+                pass
             else:
-                messages.append(
-                    f"**Input ditolak:** tidak cukup bukti bahasa Indonesia (kode `{content_lang}`). "
-                    "Aplikasi hanya menerjemahkan dari teks berbahasa Indonesia atau Inggris sesuai pilihan."
-                )
+                pass
         elif src == "en":
             ok_en, hint = _heuristic_english(content_lang, langs)
             if ok_en:
@@ -177,15 +164,9 @@ class SemanticAnalyzer:
                 elif content_lang == "en":
                     messages.append("Validasi bahasa OK: isi diperlakukan sebagai **Inggris**.")
             elif content_lang == "id" and _lang_prob(langs, "id") >= 0.35 and _lang_prob(langs, "en") < _MIN_EN_SCORE:
-                messages.append(
-                    "**Input ditolak:** teks terlihat seperti **Indonesia**, sedangkan bahasa sumber **Inggris**. "
-                    "Ubah pilihan bahasa sumber atau tulis dalam bahasa Inggris."
-                )
+                pass
             else:
-                messages.append(
-                    f"**Input ditolak:** tidak cukup bukti bahasa Inggris (kode `{content_lang}`). "
-                    "Aplikasi hanya menerjemahkan dari teks berbahasa Indonesia atau Inggris sesuai pilihan."
-                )
+                pass
         else:
             messages.append("Bahasa sumber tidak dikenal; pilih Indonesia atau Inggris.")
 
